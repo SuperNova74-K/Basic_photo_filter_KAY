@@ -1,7 +1,3 @@
-//
-// 
-//
-
 #ifndef BASIC_PHOTO_FILTER_KAY_FILTER_GROUP_3_H
 #define BASIC_PHOTO_FILTER_KAY_FILTER_GROUP_3_H
 
@@ -32,8 +28,6 @@ void darken_n_lighten(unsigned char img[][SIZE], bool mode){
         }
     }        
 }
-
-
 
 
 #endif //BASIC_PHOTO_FILTER_KAY_FILTER_GROUP_3_H
