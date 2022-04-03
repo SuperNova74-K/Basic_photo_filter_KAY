@@ -80,4 +80,59 @@ void flip(string style) //a parameter that tells what style to do (horizontal or
 }
 
 
+//mirror filter
+void mirror(string style) //a parameter that tells what style to do (lower or upper or left or right)
+{
+
+
+    if (style == "lower") //or any thing else (you can change it to fit the final code) 
+    {
+        //only half the rows
+        for (int i = 0; i < (SIZE / 2); i++)
+        {
+            for (int j = 0; j < (SIZE); j++)
+            {
+                image[i][j] = image[255 - i][j]; //make the upper half the flip of the lower half
+            }
+        }
+    }
+    else if (style == "upper") //or any thing else (you can change it to fit the final code) 
+    {
+        //only half the rows
+        for (int i = 0; i < (SIZE / 2); i++)
+        {
+            for (int j = 0; j < (SIZE); j++)
+            {
+                image[255 - i][j] = image[i][j]; //make the lower half the flip of the upper half 
+            }
+        }
+    }
+    else if (style == "right") //or any thing else (you can change it to fit the final code)
+    {
+        for (int i = 0; i < (SIZE); i++)
+        {
+            for (int j = 0; j < (SIZE / 2); j++) //only half the columns
+            {
+
+                image[i][j] = image[i][255 - j]; //make the left half the flip of the right half
+
+            }
+        }
+    }
+    else if (style == "left") //or any thing else (you can change it to fit the final code)
+    {
+        for (int i = 0; i < (SIZE); i++)
+        {
+            for (int j = 0; j < (SIZE / 2); j++) //only half the columns
+            {
+
+                image[i][255 - j] = image[i][j]; //make the right half the flip of the left half
+
+            }
+        }
+    }
+
+}
+
+
 #endif //BASIC_PHOTO_FILTER_KAY_FILTER_GROUP_1_H
