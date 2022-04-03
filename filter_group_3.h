@@ -6,9 +6,12 @@
 
 
 void merge_filter(unsigned char img1[][SIZE], unsigned char img2[][SIZE]){
+    // looping over every pixel
     for (int i = 0; i < SIZE; i++)
     {
         for(int j = 0; j < SIZE ; j++){
+            // adding the values of the pixel form first photo and the pixel form second photo and getting their average
+            // storing that average to the first image that we later save to the pc.
             img1[i][j] = (img1[i][j] + img2[i][j]) / 2;
         }
     }
@@ -17,22 +20,26 @@ void merge_filter(unsigned char img1[][SIZE], unsigned char img2[][SIZE]){
 
 void darken_n_lighten(unsigned char img[][SIZE], bool mode){
     float ratio;
+    // if the mode is true then we lighten the image by multiplying it's values by 1.5
+    // if the mode is false we darken the image by multiplying it's value by 0.5
     (mode) ? ratio = 1.5 : ratio = 0.5;
 
     for (int i = 0; i < SIZE; i++){
         for(int j = 0; j < SIZE ; j++){
+            // for every pixel we multiply by the ratio.
             int new_value = (float(img[i][j]) * ratio);
+
+            // in case a pixel was 200 for eg. when we multiply it it turns into 300 which is out of range
+            // so we bring them down to the maximum limit. 
             if(new_value > 255){
                 new_value = 255;
-            }else if (new_value < 0){
-                new_value = 0;
             }
+            
+            // we then change the pixel's value to the new value.
             img[i][j] = (unsigned char) new_value;
         }
     }        
 }
-
-
 
 
 void shrink_img(unsigned char img[][SIZE], int deno){
@@ -66,8 +73,8 @@ void shrink_img(unsigned char img[][SIZE], int deno){
 }
 
 
-// THIS FILTER IS BASED ON THE GUSSIAN BLUR TECHNIQUE.
 void blur_img(unsigned char img[][SIZE]){
+// THIS FILTER IS BASED ON THE GUSSIAN BLUR TECHNIQUE.
 
     // making a copy of the picture to avoid progressive (and wrong) blur
     unsigned char alt_img[SIZE][SIZE];
