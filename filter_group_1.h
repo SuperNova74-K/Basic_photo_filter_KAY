@@ -20,7 +20,7 @@ using namespace std;
 
 //image 2D array
 unsigned char image[SIZE][SIZE];
-unsigned char newImage[SIZE][SIZE];
+unsigned char new_image[SIZE][SIZE];
 
 
 //Black and White filter
@@ -145,7 +145,7 @@ void edge_detect()
     {
         for (int j = 0; j < SIZE; j++)
         {
-            newImage[i][j] = 255;
+            new_image[i][j] = 255;
             avrege += image[i][j];
         }
     }
@@ -164,7 +164,7 @@ void edge_detect()
                 (image[i + 1][j - 1] - image[i][j]) > value || (image[i - 1][j + 1] - image[i][j]) > value
                 )
             {
-                newImage[i][j] = 0; //if the diffrence between them is greater than the value then its an edge
+                new_image[i][j] = 0; //if the diffrence between them is greater than the value then its an edge
             }
         }
     }
@@ -173,7 +173,7 @@ void edge_detect()
     {
         for (int j = 0; j < SIZE; j++)
         {
-            image[i][j] = newImage[i][j]; //coping into the orignal image
+            image[i][j] = new_image[i][j]; //coping into the orignal image
         }
     }
 }
