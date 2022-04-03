@@ -43,4 +43,41 @@ void black_white()
 }
 
 
+//flip filter
+void flip(string style) //a parameter that tells what style to do (horizontal or virtical)
+{
+    int temp;
+
+    if (style == "horizontal") //or any thing else (you can change it to fit the final code) 
+    {
+        //we only swap half the image with the other half so I make it SIZE/2
+        //if it was SIZE it will return to be the orignal image
+        for (int i = 0; i < (SIZE / 2); i++)
+        {
+            for (int j = 0; j < (SIZE); j++)
+            {
+                //swaping 2 numbers
+                temp = image[i][j];
+                image[i][j] = image[255 - i][j];
+                image[255 - i][j] = temp;
+            }
+        }
+    }
+    else if (style == "virtical") //or any thing else (you can change it to fit the final code)
+    {
+        for (int i = 0; i < (SIZE); i++)
+        {
+            for (int j = 0; j < (SIZE / 2); j++)
+            {
+                //swaping 2 numbers
+                temp = image[i][j];
+                image[i][j] = image[i][255 - j];
+                image[i][255 - j] = temp;
+            }
+        }
+    }
+
+}
+
+
 #endif //BASIC_PHOTO_FILTER_KAY_FILTER_GROUP_1_H
