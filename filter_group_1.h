@@ -20,6 +20,7 @@ using namespace std;
 
 //image 2D array
 unsigned char image[SIZE][SIZE];
+unsigned char newImage[SIZE][SIZE];
 
 
 //Black and White filter
@@ -132,6 +133,49 @@ void mirror(string style) //a parameter that tells what style to do (lower or up
         }
     }
 
+}
+
+
+//edge detection filter
+void edge_detect()
+{
+    int avrege = 0;
+
+    for (int i = 0; i < SIZE; i++)
+    {
+        for (int j = 0; j < SIZE; j++)
+        {
+            newImage[i][j] = 255;
+            avrege += image[i][j];
+        }
+    }
+
+    avrege = avrege / (256 * 256); //clculating the avrege of pixels color
+    int value = avrege / 4; //we are comparing each pixel value with this value to determine if its an edge or not
+
+
+    for (int i = 1; i < SIZE - 1; i++) //"SIZE-1" is to avoid looping at the edges which can cause out of range error
+    {
+        for (int j = 1; j < SIZE - 1; j++)
+        {
+            if ( //checking all the 8 pixels around each pixel 
+                (image[i + 1][j] - image[i][j]) > value || (image[i - 1][j] - image[i][j]) > value || (image[i][j + 1] - image[i][j]) > value ||
+                (image[i][j - 1] - image[i][j]) > value || (image[i + 1][j + 1] - image[i][j]) > value || (image[i - 1][j - 1] - image[i][j]) > value ||
+                (image[i + 1][j - 1] - image[i][j]) > value || (image[i - 1][j + 1] - image[i][j]) > value
+                )
+            {
+                newImage[i][j] = 0; //if the diffrence between them is greater than the value then its an edge
+            }
+        }
+    }
+
+    for (int i = 0; i < SIZE; i++)
+    {
+        for (int j = 0; j < SIZE; j++)
+        {
+            image[i][j] = newImage[i][j]; //coping into the orignal image
+        }
+    }
 }
 
 
