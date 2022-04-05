@@ -18,7 +18,7 @@
 
 using namespace std;
 
-//image 2D array
+// image 2D array
 // unsigned char image[SIZE][SIZE];
 // unsigned char new_image[SIZE][SIZE];
 
