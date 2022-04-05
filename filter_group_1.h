@@ -1,4 +1,4 @@
-// FCI – Programming 1 – 2022 - Assignment 3 
+// FCI ï¿½ Programming 1 ï¿½ 2022 - Assignment 3 
 // Program Name: smallest ID filters.cpp
 // Last Modification Date: xx/xx/xxxx
 // Author1 and ID and Group: Abdelrahman Wael Mohammed Hanafy - ID:20210490
@@ -10,33 +10,33 @@
 #define BASIC_PHOTO_FILTER_KAY_FILTER_GROUP_1_H
 
 
-#include <iostream>
-#include <fstream>
-#include <cstring>
-#include <cmath>
-#include "bmplib.cpp"
+// #include <iostream>
+// #include <fstream>
+// #include <cstring>
+// #include <cmath>
+// #include "bmplib.cpp"
 
 using namespace std;
 
 //image 2D array
-unsigned char image[SIZE][SIZE];
-unsigned char new_image[SIZE][SIZE];
+// unsigned char image[SIZE][SIZE];
+// unsigned char new_image[SIZE][SIZE];
 
 
 //Black and White filter
-void black_white()
+void black_white(unsigned char img[SIZE][SIZE])
 {
     for (int i = 0; i < SIZE; i++)
     {
         for (int j = 0; j < SIZE; j++)
         {
-            if (image[i][j] >= 128) //if it's closer to white then make it white 
+            if (img[i][j] >= 128) //if it's closer to white then make it white 
             {
-                image[i][j] = 255;
+                img[i][j] = 255;
             }
             else //if it's closer to black then make it black
             {
-                image[i][j] = 0;
+                img[i][j] = 0;
             }
         }
 
@@ -45,11 +45,11 @@ void black_white()
 
 
 //flip filter
-void flip(string style) //a parameter that tells what style to do (horizontal or virtical)
+void flip(unsigned char img[SIZE][SIZE], bool style) //a parameter that tells what style to do (horizontal or virtical)
 {
     int temp;
 
-    if (style == "horizontal") //or any thing else (you can change it to fit the final code) 
+    if (style == true) //or any thing else (you can change it to fit the final code) 
     {
         //we only swap half the image with the other half so I make it SIZE/2
         //if it was SIZE it will return to be the orignal image
@@ -58,22 +58,22 @@ void flip(string style) //a parameter that tells what style to do (horizontal or
             for (int j = 0; j < (SIZE); j++)
             {
                 //swaping 2 numbers
-                temp = image[i][j];
-                image[i][j] = image[255 - i][j];
-                image[255 - i][j] = temp;
+                temp = img[i][j];
+                img[i][j] = img[255 - i][j];
+                img[255 - i][j] = temp;
             }
         }
     }
-    else if (style == "virtical") //or any thing else (you can change it to fit the final code)
+    else if (style == false) //or any thing else (you can change it to fit the final code)
     {
         for (int i = 0; i < (SIZE); i++)
         {
             for (int j = 0; j < (SIZE / 2); j++)
             {
                 //swaping 2 numbers
-                temp = image[i][j];
-                image[i][j] = image[i][255 - j];
-                image[i][255 - j] = temp;
+                temp = img[i][j];
+                img[i][j] = img[i][255 - j];
+                img[i][255 - j] = temp;
             }
         }
     }
@@ -82,7 +82,7 @@ void flip(string style) //a parameter that tells what style to do (horizontal or
 
 
 //mirror filter
-void mirror(string style) //a parameter that tells what style to do (lower or upper or left or right)
+void mirror(unsigned char img[SIZE][SIZE] ,string style) //a parameter that tells what style to do (lower or upper or left or right)
 {
 
 
@@ -93,7 +93,7 @@ void mirror(string style) //a parameter that tells what style to do (lower or up
         {
             for (int j = 0; j < (SIZE); j++)
             {
-                image[i][j] = image[255 - i][j]; //make the upper half the flip of the lower half
+                img[i][j] = img[255 - i][j]; //make the upper half the flip of the lower half
             }
         }
     }
@@ -104,7 +104,7 @@ void mirror(string style) //a parameter that tells what style to do (lower or up
         {
             for (int j = 0; j < (SIZE); j++)
             {
-                image[255 - i][j] = image[i][j]; //make the lower half the flip of the upper half 
+                img[255 - i][j] = img[i][j]; //make the lower half the flip of the upper half 
             }
         }
     }
@@ -115,7 +115,7 @@ void mirror(string style) //a parameter that tells what style to do (lower or up
             for (int j = 0; j < (SIZE / 2); j++) //only half the columns
             {
 
-                image[i][j] = image[i][255 - j]; //make the left half the flip of the right half
+                img[i][j] = img[i][255 - j]; //make the left half the flip of the right half
 
             }
         }
@@ -127,7 +127,7 @@ void mirror(string style) //a parameter that tells what style to do (lower or up
             for (int j = 0; j < (SIZE / 2); j++) //only half the columns
             {
 
-                image[i][255 - j] = image[i][j]; //make the right half the flip of the left half
+                img[i][255 - j] = img[i][j]; //make the right half the flip of the left half
 
             }
         }
@@ -137,16 +137,17 @@ void mirror(string style) //a parameter that tells what style to do (lower or up
 
 
 //edge detection filter
-void edge_detect()
+void edge_detect(unsigned char img[SIZE][SIZE])
 {
     int avrege = 0;
+    unsigned char new_image[SIZE][SIZE];
 
     for (int i = 0; i < SIZE; i++)
     {
         for (int j = 0; j < SIZE; j++)
         {
             new_image[i][j] = 255;
-            avrege += image[i][j];
+            avrege += img[i][j];
         }
     }
 
@@ -159,9 +160,9 @@ void edge_detect()
         for (int j = 1; j < SIZE - 1; j++)
         {
             if ( //checking all the 8 pixels around each pixel 
-                (image[i + 1][j] - image[i][j]) > value || (image[i - 1][j] - image[i][j]) > value || (image[i][j + 1] - image[i][j]) > value ||
-                (image[i][j - 1] - image[i][j]) > value || (image[i + 1][j + 1] - image[i][j]) > value || (image[i - 1][j - 1] - image[i][j]) > value ||
-                (image[i + 1][j - 1] - image[i][j]) > value || (image[i - 1][j + 1] - image[i][j]) > value
+                (img[i + 1][j] - img[i][j]) > value || (img[i - 1][j] - img[i][j]) > value || (img[i][j + 1] - img[i][j]) > value ||
+                (img[i][j - 1] - img[i][j]) > value || (img[i + 1][j + 1] - img[i][j]) > value || (img[i - 1][j - 1] - img[i][j]) > value ||
+                (img[i + 1][j - 1] - img[i][j]) > value || (img[i - 1][j + 1] - img[i][j]) > value
                 )
             {
                 new_image[i][j] = 0; //if the diffrence between them is greater than the value then its an edge
@@ -173,7 +174,7 @@ void edge_detect()
     {
         for (int j = 0; j < SIZE; j++)
         {
-            image[i][j] = new_image[i][j]; //coping into the orignal image
+            img[i][j] = new_image[i][j]; //coping into the orignal image
         }
     }
 }
