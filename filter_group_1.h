@@ -84,9 +84,16 @@ void flip(unsigned char img[SIZE][SIZE], bool style) //a parameter that tells wh
 //mirror filter
 void mirror(unsigned char img[SIZE][SIZE] ,string style) //a parameter that tells what style to do (lower or upper or left or right)
 {
+    /*
+        Style menu:
+        lower = 1;
+        upper = 2;
+        right = 3;
+        left = 4;
+    */
 
 
-    if (style == "lower") //or any thing else (you can change it to fit the final code) 
+    if (style == "1") //or any thing else (you can change it to fit the final code) 
     {
         //only half the rows
         for (int i = 0; i < (SIZE / 2); i++)
@@ -97,7 +104,7 @@ void mirror(unsigned char img[SIZE][SIZE] ,string style) //a parameter that tell
             }
         }
     }
-    else if (style == "upper") //or any thing else (you can change it to fit the final code) 
+    else if (style == "2") //or any thing else (you can change it to fit the final code) 
     {
         //only half the rows
         for (int i = 0; i < (SIZE / 2); i++)
@@ -108,7 +115,7 @@ void mirror(unsigned char img[SIZE][SIZE] ,string style) //a parameter that tell
             }
         }
     }
-    else if (style == "right") //or any thing else (you can change it to fit the final code)
+    else if (style == "3") //or any thing else (you can change it to fit the final code)
     {
         for (int i = 0; i < (SIZE); i++)
         {
@@ -120,7 +127,7 @@ void mirror(unsigned char img[SIZE][SIZE] ,string style) //a parameter that tell
             }
         }
     }
-    else if (style == "left") //or any thing else (you can change it to fit the final code)
+    else if (style == "4") //or any thing else (you can change it to fit the final code)
     {
         for (int i = 0; i < (SIZE); i++)
         {
