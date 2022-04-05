@@ -90,6 +90,7 @@ void blur_img(unsigned char img[][SIZE]){
     
 
     int sum = 0;
+    int n_pixels;
     // for every pixel in the alt image
     // add the values of the pixel itself and the 8 pixels around it to a value called sum.
     for(int i = 0; i < SIZE;  i++){
@@ -97,6 +98,8 @@ void blur_img(unsigned char img[][SIZE]){
         {
             // zero-ing the sum every pixel to avoid messing up the values.
             sum = 0;
+
+            n_pixels = 1; // n_pixels is a counter for pixels so we can later calculate the average properly
 
             // the following if statments are there to make sure that we dont'...
             // get out of range (you cannot take the pixel up left if you are already at the top left)
@@ -110,22 +113,26 @@ void blur_img(unsigned char img[][SIZE]){
             // top left
             if(!(i == 0 || j == 0)){
                 sum += alt_img[i-1][j-1];
+                n_pixels++;
             }
             
             // directly top
             if(!(i == 0)){
                 sum += alt_img[i-1][j];
+                n_pixels++;
             }
 
 
             //top right
             if(!(i == 0 || j == 255)){
                 sum += alt_img[i-1][j+1];
+                n_pixels++;
             }
 
             // left
             if(!(j == 0)){
                 sum += alt_img[i][j-1];
+                n_pixels++;
             }
 
             // the pixel itself must be present no matter what pixel you are at.
@@ -135,26 +142,30 @@ void blur_img(unsigned char img[][SIZE]){
             // right
             if(!(j == 255)){
                 sum += alt_img[i][j+1];
+                n_pixels++;
             }
 
             //bottom left
             if(!(i == 255 || j == 0)){
                 sum += alt_img[i+1][j-1];
+                n_pixels++;
             }
 
             //directly below
             if(!(i == 255)){
                 sum += alt_img[i+1][j];
+                n_pixels++;
             }
 
             // bottom right
             if(!(j == 255 || i == 255)){
                 sum += alt_img[i+1][j+1];
+                n_pixels++;
             }
 
             // we then take the sum of all of these pixel and devide by 10 to get the average
             // store the average in the pixel in the new picture.
-            img[i][j] = (unsigned char) (round(sum / 9));
+            img[i][j] = (unsigned char) (round(sum / n_pixels));
             
         }
     }
