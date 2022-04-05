@@ -5,6 +5,7 @@
 #include "bmplib.cpp"
 #include "filter_group_3.h"
 #include "filter_group_1.h"
+#include "filter_group_2.h"
 
 
 using namespace std;
@@ -12,7 +13,7 @@ using namespace std;
 void clear();
 void print_options();
 void excute_choice(string choice);
-string get_choice(string allowed);
+string get_choice(vector<string>allowed, int mode, string message);
 void load_img(int pic_number);
 int find(vector<string>vec, string target);
 
@@ -26,18 +27,22 @@ int main(){
     load_img(1);
     string choice = "random";
     while(choice != "0"){
-        print_options();
         vector<string>allowed = {"1","2","3","4","5","6","7","8","9","0","a","b","c","s"};
         // could have done this with regex but I wanted Custom function for easier debugging
-        choice = get_choice(allowed);
+        choice = get_choice(allowed,0, "d");
         excute_choice(choice);
         clear();
-        if(choice != "0"){
-            cout << "Filter Applied.";
+        if(choice != "0" && choice != "s"){
+            cout << "Filter Applied."<< endl;
             sleep(1.5);
-        }else{
+        }else if(choice == "s"){
+            cout << "Image saved."<< endl;
+            sleep(1.5);
+        }
+        else{
             clear();
-            cout << "Thanks for using our program.";
+            cout << "Thanks for using our program!";
+            sleep(2);
             return 0;
         }
     }
@@ -49,12 +54,13 @@ void clear(){
 }
 
 void print_options(){
+    clear();
     cout << "Please choose one of the follwoing" << endl;
     cout << "Available options:"<< endl;
     cout << "(1) Black & White"<< endl;
     cout << "(2) Invert"<< endl;
     cout << "(3) Merge"<< endl;
-    cout << "(4) Flip";
+    cout << "(4) Flip"<< endl;
     cout << "(5) Darken & Lighten"<< endl;
     cout << "(6) Rotate"<< endl;
     cout << "(7) Detect Edges"<< endl;
@@ -65,6 +71,7 @@ void print_options(){
     cout << "(c) Blur"<< endl;
     cout << "(s) Save the image to a file"<< endl;
     cout << "(0) Exit"<< endl;
+    cout << "Enter Option:";
 }
 
 int find(vector<string>vec, string target){
@@ -77,11 +84,15 @@ int find(vector<string>vec, string target){
 }
 
 
-string get_choice(vector<string>allowed)){
+string get_choice(vector<string>allowed, int mode, string message){
     string output;
     while (1)
     {
-        cout << "Please enter option: ";
+        if(mode == 0){
+            print_options();
+        }else{
+            cout << message;
+        }
         string inpt; 
         getline(cin, inpt);
         // while((getchar()) != '\n');
@@ -91,10 +102,12 @@ string get_choice(vector<string>allowed)){
             return output;
         }else{
             clear();
-            cout << "wrong input, please enter a valid Option.";
-            sleep(1);
-            clear();
-            print_options();
+            cout << "wrong input, please enter a valid Option." << endl;
+            if(mode = 0){
+                print_options();
+            }else{
+                cout << message;
+            }
         }
     }
 
@@ -105,26 +118,23 @@ void excute_choice(string choice){
     if(choice == "1"){
         black_white(img);
     }
-    // Waiting for Anwar
-    // if(choice == "2"){
-    //     invert(img);
-    // }
+    if(choice == "2"){
+        Invert_img_filter(img);
+    }
     else if(choice == "3"){
         load_img(2);
         merge_filter(img, img2);
     }
     else if(choice == "4"){
-        cout << "Choose Mode:\n(1) Horizontal\n(2) Vertical" << endl;
-        vector<string>allowed = {"1","2"};
-        string option = get_choice(allowed);
-        bool style = (option == "1") ? true : false;
+        vector<string>allowed{"1","2"};
+        string option = get_choice(allowed,1,"Choose Mode:\n(1) Horizontal\n(2) Vertical\nChoose an option: ");
+        bool style = (option == "1");
         flip(img, style);
     }
     else if(choice == "5"){
-        cout << "Choose Mode:\n(1) Lighten\n(2) Darken" << endl;
-        vector<string>allowed = {"1","2"};
-        string option = get_choice(allowed);
-        bool style = (option == "1") ? true : false;
+        vector<string>allowed{"1","2"};
+        string option = get_choice(allowed,1,"Choose Mode:\n(1) Lighten\n(2) Darken\nChoose an option: ");
+        bool style = (option == "1");
         darken_n_lighten(img,style);
     }
     // else if(choice == "6"){
@@ -133,20 +143,20 @@ void excute_choice(string choice){
     else if(choice == "7"){
         edge_detect(img);
     }
-    // else if(choice == "8"){
-    //     enlarge
-    // }
+    else if(choice == "8"){
+        vector<string>allowed{"1","2","3","4"};
+        string option = get_choice(allowed,1,"Choose the qraurter you want to enlarge:\n(1) First quarter\n(2) Second quarter\n(3) Third quarter\n(4) Fourth quarter\nChoose an option: ");
+        enlarge_img_filter(img, option);
+    }
     else if(choice == "9"){
-        cout << "Choose Mode:\n(1) 1/2\n(2) 1/3\n(3) 1/4" << endl;
-        vector<string>allowed = {"1","2","3"};
-        string option = get_choice(allowed);
-        shrink_img(img, option + 1);
+        vector<string>allowed{"1","2","3"};
+        string option = get_choice(allowed,1,"Choose Mode:\n(1) 1/2\n(2) 1/3\n(3) 1/4\nChoose an option: ");
+        shrink_img(img, stoi(option) + 1);
     }
     else if(choice == "a"){
-        cout << "Choose Mode:\n(1) 1/2\n(2) 1/3\n(3) 1/4" << endl;
-        vector<string>allowed = {"1","2","3","4"};
-        string option = get_choice(allowed);
-        mirror(img, allowed);
+        vector<string>allowed{"1","2","3","4"};
+        string option = get_choice(allowed,1,"Choose the part to mirror:\n(1) lower\n(2) upper\n(3) right\n(4) Left\nChoose an option: ");
+        mirror(img, option);
     }
     // else if(choice == "b"){
     //     Shuffle
@@ -155,11 +165,56 @@ void excute_choice(string choice){
         blur_img(img);
     }
     else if(choice == "s"){
-        clear();
-        cout << "Please write the Target file name\nNo special characters allowed\n(IF THE FILE EXISTS, IT WILL BE OVERWRITTEN !): ";
-        string option;
-        getline(cin, option);
+        strt_of_Zloop:
+        while(true){
+            clear();
+            cout << "Please write the Target file name\n{\\/:*?\"<>|} characters are not allowed: ";
+            string option = "";
+            getline(cin, option);
 
+            vector<string> not_allowed{"\\", "/", ":", "*", "?", "\"", "<", ">", "|"};
+            for(auto i : option){
+                string tmp_to_chnge_chr_2_strng;
+                tmp_to_chnge_chr_2_strng += i;
+                if((find(not_allowed, tmp_to_chnge_chr_2_strng) != -1) || option.size() > 254){
+                    clear();
+                    cout << "This filename is not allowed !";
+                    sleep(5);
+                    clear();
+                    option.clear();
+                    cin.clear();
+                    goto strt_of_Zloop;
+
+                }
+            }
+
+
+            option += ".bmp";
+            ifstream exist;
+            exist.open(option);
+            char *option_as_C_string = new char [option.length()+1];
+            strcpy(option_as_C_string, option.c_str());
+            if(exist){
+                cout << "This file already exists, ARE YOU SURE you want to OVERWRITE it ? type (YES) for yes, anything else for no :";
+                string overwrite;
+                getline(cin, overwrite);
+                if(overwrite == "YES"){
+                    writeGSBMP(option_as_C_string, img);
+                    delete[] option_as_C_string;
+                    break;
+                }
+                else {
+                    cout << "File was not overwriten, enter any key to re-enter the target name...";
+                    string temp; getline(cin, temp);
+                    clear();
+                    goto strt_of_Zloop;
+                }
+            }else{
+                writeGSBMP(option_as_C_string, img);
+                delete[] option_as_C_string;
+                break;
+            }
+        }
     }
     
 }
@@ -171,7 +226,6 @@ void load_img(int pic_number){
         cout << "Please enter the name of the photo you would like to edit: ";
         cin.getline(inpt,100);
         strcat(inpt,".bmp");
-        while((getchar()) != '\n');
         clear();
         }
         while(readGSBMP(inpt, img) == 1);
@@ -181,7 +235,6 @@ void load_img(int pic_number){
         cout << "Please enter the name of the second photo: ";
         cin.getline(inpt,100);
         strcat(inpt,".bmp");
-        while((getchar()) != '\n');
         clear();
         }
         while(readGSBMP(inpt, img2) == 1);
