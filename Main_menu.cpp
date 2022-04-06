@@ -27,16 +27,20 @@ int main(){
     load_img(1);
     string choice = "random";
     while(choice != "0"){
-        vector<string>allowed = {"1","2","3","4","5","7","8","9","0","a","c","s"};
+        vector<string>allowed = {"1","2","3","4","5","7","8","9","0","a","c","s","l"};
         // could have done this with regex but I wanted Custom function for easier debugging
         choice = get_choice(allowed,0, "d");
         excute_choice(choice);
         clear();
-        if(choice != "0" && choice != "s"){
+        if(choice != "0" && choice != "s" && choice != "l"){
             cout << "Filter Applied."<< endl;
             sleep(1.5);
         }else if(choice == "s"){
             cout << "Image saved."<< endl;
+            sleep(1.5);
+        }
+        else if(choice == "l"){
+            cout << "Image Loaded."<< endl;
             sleep(1.5);
         }
         else{
@@ -45,8 +49,7 @@ int main(){
             sleep(2);
             return 0;
         }
-    }
-    
+    } 
 }
 
 void clear(){
@@ -212,6 +215,7 @@ void excute_choice(string choice){
         }
     }
     else if(choice == "l"){
+        clear();
         load_img(1);
     }
     
