@@ -1,4 +1,4 @@
-#include <bits/stdc++.h>
+#include <iostream>
 #include <unistd.h> // to make sleep() work
 #include <fstream>
 #include "bmplib.h"
@@ -27,7 +27,7 @@ int main(){
     load_img(1);
     string choice = "random";
     while(choice != "0"){
-        vector<string>allowed = {"1","2","3","4","5","6","7","8","9","0","a","b","c","s"};
+        vector<string>allowed = {"1","2","3","4","5","7","8","9","0","a","c","s"};
         // could have done this with regex but I wanted Custom function for easier debugging
         choice = get_choice(allowed,0, "d");
         excute_choice(choice);
@@ -62,14 +62,15 @@ void print_options(){
     cout << "(3) Merge"<< endl;
     cout << "(4) Flip"<< endl;
     cout << "(5) Darken & Lighten"<< endl;
-    cout << "(6) Rotate"<< endl;
+    cout << "(6) Rotate (Temporarily not available)"<< endl;
     cout << "(7) Detect Edges"<< endl;
     cout << "(8) Enlarge"<< endl;
     cout << "(9) Shrink"<< endl;
     cout << "(a) Mirror 1/2 Image"<< endl;
-    cout << "(b) Shuffle"<< endl;
+    cout << "(b) Shuffle (Temporarily not available)"<< endl;
     cout << "(c) Blur"<< endl;
     cout << "(s) Save the image to a file"<< endl;
+    cout << "(l) Load img to edit."<< endl;
     cout << "(0) Exit"<< endl;
     cout << "Enter Option:";
 }
@@ -95,7 +96,6 @@ string get_choice(vector<string>allowed, int mode, string message){
         }
         string inpt; 
         getline(cin, inpt);
-        // while((getchar()) != '\n');
         int found = find(allowed,inpt);
         if(found != -1){
             output = allowed[found];
@@ -103,11 +103,6 @@ string get_choice(vector<string>allowed, int mode, string message){
         }else{
             clear();
             cout << "wrong input, please enter a valid Option." << endl;
-            if(mode = 0){
-                print_options();
-            }else{
-                cout << message;
-            }
         }
     }
 
@@ -215,6 +210,9 @@ void excute_choice(string choice){
                 break;
             }
         }
+    }
+    else if(choice == "l"){
+        load_img(1);
     }
     
 }
