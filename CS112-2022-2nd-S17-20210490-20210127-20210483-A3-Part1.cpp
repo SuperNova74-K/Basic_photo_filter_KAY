@@ -3,10 +3,10 @@
     
     Authors:
     Khaled Waleed Salah , ID: 20210127
-    (hanafy write here your name and id as well as youssef's)
+    Abdelrahman Wael Mohammed Hanafy , ID: 20210490
+    Youssef Mohamed Salah Eldin Anwar , ID: 20210483 
 
-
-    Prepared for : Dr.Mohammed El-Ramly , TA: Hager (write her second name hanafy)
+    Prepared for : Dr.Mohammed El-Ramly , TA: Hager Ali
     Purpose : Photo Editor with multiple filters
     Date : 7 April 2022
 
@@ -23,6 +23,7 @@
 
 #include <iostream>
 #include <unistd.h> // to make sleep() work
+#include <vector>
 #include <fstream>
 #include "bmplib.h"
 #include "bmplib.cpp"
