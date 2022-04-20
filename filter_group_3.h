@@ -50,36 +50,68 @@ void darken_n_lighten(unsigned char img[][SIZE][RGB], bool mode){
 
 
 void shrink_img(unsigned char img[][SIZE][RGB], int deno){
-    // creating a new img to not to mess up the old one
-    unsigned char sml_img[SIZE][SIZE][RGB];
-    
-    //loop over rows with increment equal to dneo (to skip some rows thus reducing resolution) 
-    for (int i = 0; i < SIZE ; i += deno)
-    {
-        // loop over pixels in row with incrememnt deno (to skip some pixels ot reduce resolution)
-        for(int j = 0; j < SIZE ; j += deno){
-            // pixel 3,3 in the original will be 1,1 in the sml_img so we basically divide by the deno (3 in this case)
-            // to get the corresponding pixel 
+    // THIS FILTER IS BASED ON THE GUSSIAN BLUR TECHNIQUE.
 
-            for(int color = 0; color < 3 ; color++){
-                sml_img[i / deno][j / deno][color] = img[i][j][color];
+    // making a copy of the picture to avoid progressive (and wrong) blur
+    // unsigned char alt_img[SIZE][SIZE][RGB];
+
+
+    // for every pixel in the alt image
+    // add the values of the pixel itself and the 8 pixels around it to a value called sum.
+    
+    for(int i = 0; i  + deno < SIZE;  i+=deno){
+        for(int j = 0; j + deno < SIZE;  j+=deno)
+        {
+            // zero-ing the sum every pixel to avoid messing up the values.
+            int sum_red = 0, sum_green = 0, sum_blue = 0;
+            int n_pixels = 0;
+             // n_pixels is a counter for pixels so we can later calculate the average properly (it's set to a one since it can't be less than one)
+            // the following if statments are there to make sure that we dont'...
+            // get out of range (you cannot take the pixel up left if you are already at the top left)
+            // so we avoid out of index range by defining the ability to take the pixel based on the current
+            // pixel location, if the if statment survived then we take the corrisponding pixel, if it doesn't
+            // the we protected our program form meesing up the memory or crashing. 
+            // Note: I am using (!) alot because I want to make it readable
+            // the right(and faster) way to do it is using !(a == b || c == d) === a!=b && c!=d (DeMorgan's law)
+            // the pixel itself must be present no matter what pixel you are at.
+            // sum += alt_img[i][j][color];                                             // might be wrong so cancelled it
+            
+            for(int k = i     ; k + 1 < SIZE && k < deno + i;  k++){
+                for(int n = j ; n + 1 < SIZE && n < deno + j;  n++){
+                    // for(int color = 0; color < 3 ; color++){
+                    //     sum += img[k][n][color];  
+                    // }
+                    sum_red   += img[k][n][0];
+                    sum_green += img[k][n][1];
+                    sum_blue  += img[k][n][2];
+                    n_pixels ++;
+                }
+            }
+            
+            img[i/deno][j/deno][0] = (unsigned char) (round(sum_red / n_pixels));
+            img[i/deno][j/deno][1] = (unsigned char) (round(sum_green / n_pixels));
+            img[i/deno][j/deno][2] = (unsigned char) (round(sum_blue / n_pixels));
+            
+            // we then take the sum of all of these pixel and devide by 10 to get the average
+            // store the average in the pixel in the new picture.
+                
+        }
+    }
+    for(int i = 0; i < SIZE; i++){
+        for(int j = (deno % 2 == 1) ? SIZE / deno : (SIZE / deno) - 1; j < SIZE; j++)
+        {
+            for(int color = 0; color < 3 ; color++)
+            {
+                    img[i][j][color] = 255;
             }
         }
     }
-    // looping normally to copy the sml img into a small part of the original img
-    // while in the same time changing the rest of the image to white.
-    for (int i = 0; i < SIZE; i++)
-    {
-        for(int j = 0; j < SIZE ; j++){
-            // if the loop is out of reach of the sml_img then make the pixel white
-            if(i >= SIZE / deno || j >= SIZE / deno){
-                for(int color = 0; color < 3 ; color++){
+    for(int i = (deno % 2 == 1) ? SIZE / deno : (SIZE / deno) - 1; i < SIZE; i++){
+        for(int j = 0; j <= SIZE / deno; j++)
+        {
+            for(int color = 0; color < 3 ; color++)
+            {
                     img[i][j][color] = 255;
-                }
-            }else{
-                for(int color = 0; color < 3 ; color++){
-                    img[i][j][color] = sml_img[i][j][color];
-                }
             }
         }
     }
@@ -100,7 +132,6 @@ void blur_img(unsigned char img[][SIZE][RGB]){
             for(int color = 0; color < 3 ; color++)
             {
                     alt_img[i][j][color] = img[i][j][color];
-                
             }
         }
     }
