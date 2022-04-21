@@ -1,6 +1,4 @@
-//Nmae : Youssef Mohamed Salah Eldin Anwar
-// ID : 20210483
-//
+
 
 #ifndef BASIC_PHOTO_FILTER_KAY_FILTER_GROUP_2_H
 #define BASIC_PHOTO_FILTER_KAY_FILTER_GROUP_2_H
