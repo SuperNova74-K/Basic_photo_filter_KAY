@@ -10,7 +10,7 @@
     Purpose : Photo Editor with multiple filters
     Date : 7 April 2022
 
-    Version : 1.2
+    Version : 1.5
     Scheduled Features : - Filter 6 & Filter B
                          - Undo option
                          - Display photo

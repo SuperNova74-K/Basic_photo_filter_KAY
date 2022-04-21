@@ -50,44 +50,42 @@ void darken_n_lighten(unsigned char img[][SIZE][RGB], bool mode){
 
 
 void shrink_img(unsigned char img[][SIZE][RGB], int deno){
-    // THIS FILTER IS BASED ON THE GUSSIAN BLUR TECHNIQUE.
+    // this algoritm works by taking the average of a number of pixels equal to the square of the deno (denumerator of 1/2)
+    // so for example if you want to shrink by 1/3 then the deno is 3 and you take a 3*3 square of pixels starting top left by the pixel you are trying to reach
+    //              /  *  *
+    //              *  *  *
+    //              *  *  *  
+    // the slash pixel (in the figure) is the pixel we are currently at and we take the average of every channel (reg-green-blue) of every pixel in 3 * 3 matrix starting
+    // top-left from the pixel wanted
+    // then we skip number of pixels equal to deno (to shrink properly).... 
+    // basiaclly we are taking big squares in the original img and turning them into small pixels in the original by taking average of values. 
 
-    // making a copy of the picture to avoid progressive (and wrong) blur
-    // unsigned char alt_img[SIZE][SIZE][RGB];
-
-
-    // for every pixel in the alt image
-    // add the values of the pixel itself and the 8 pixels around it to a value called sum.
-    
+    // i+=deno to skip pixels in the original and loop only on the start of big squares, same thing with the j
+    // and the condidtion is to avoid getting out of boundry of the original img
     for(int i = 0; i  + deno < SIZE;  i+=deno){
         for(int j = 0; j + deno < SIZE;  j+=deno)
         {
             // zero-ing the sum every pixel to avoid messing up the values.
             int sum_red = 0, sum_green = 0, sum_blue = 0;
             int n_pixels = 0;
-             // n_pixels is a counter for pixels so we can later calculate the average properly (it's set to a one since it can't be less than one)
-            // the following if statments are there to make sure that we dont'...
-            // get out of range (you cannot take the pixel up left if you are already at the top left)
-            // so we avoid out of index range by defining the ability to take the pixel based on the current
-            // pixel location, if the if statment survived then we take the corrisponding pixel, if it doesn't
-            // the we protected our program form meesing up the memory or crashing. 
-            // Note: I am using (!) alot because I want to make it readable
-            // the right(and faster) way to do it is using !(a == b || c == d) === a!=b && c!=d (DeMorgan's law)
-            // the pixel itself must be present no matter what pixel you are at.
-            // sum += alt_img[i][j][color];                                             // might be wrong so cancelled it
             
+
+            // when we find a starting pixel of a big square (like the slash pixel above) we loop over the whole square to take average
+            // those loops are to loop inside of the big squares (conditions are adjusted to avoid getting out of the boundry)
             for(int k = i     ; k + 1 < SIZE && k < deno + i;  k++){
                 for(int n = j ; n + 1 < SIZE && n < deno + j;  n++){
-                    // for(int color = 0; color < 3 ; color++){
-                    //     sum += img[k][n][color];  
-                    // }
+
                     sum_red   += img[k][n][0];
                     sum_green += img[k][n][1];
                     sum_blue  += img[k][n][2];
+                    // the pixel in the last row for example will only have 2 pixels to take average for so the number of pixels vary thus to
+                    // calcute average properly we count them to later divide by their number
                     n_pixels ++;
                 }
             }
             
+            // assging the average to the small pixel in the original image
+            // i/deno access is to put the pixels next to each other in the original pixel (since i & j can only point to a start of a big square)
             img[i/deno][j/deno][0] = (unsigned char) (round(sum_red / n_pixels));
             img[i/deno][j/deno][1] = (unsigned char) (round(sum_green / n_pixels));
             img[i/deno][j/deno][2] = (unsigned char) (round(sum_blue / n_pixels));
@@ -97,6 +95,9 @@ void shrink_img(unsigned char img[][SIZE][RGB], int deno){
                 
         }
     }
+
+    // those for loops are to turn the rest of the pixels in the original image white
+    // the initial value of the i & j depends on deno, if deno is even is diffirent from odd so we use trinary operator
     for(int i = 0; i < SIZE; i++){
         for(int j = (deno % 2 == 1) ? SIZE / deno : (SIZE / deno) - 1; j < SIZE; j++)
         {
