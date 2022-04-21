@@ -15,23 +15,30 @@
                          - Undo option
                          - Display photo
                          - Colorful theme for the Terminal / CMD
-                         - Fixing Clear() Function to work with Mac & Linux
-                         - Adding more defensive regarding target file naming (last character must not be space)
+                         - Fixing Clear() Function to work with Mac & Linux        # done
+                         - Adding more defensive regarding target file naming (last character must not be space)            # Done
 */
 
 
 #include <iostream>
 #include <unistd.h> // to make sleep() work
 #include <fstream>
+#include <filesystem>
 #include "bmplib.h"
 #include "bmplib.cpp"
-#include <filesystem>
 #include "filter_group_3.h"
 // #include "filter_group_1.h"
 // #include "filter_group_2.h"
 
-
 using namespace std;
+
+#ifdef _WIN32
+    bool is_os_win = true;
+#else
+    bool is_os_win = false;
+#endif
+
+
 
 // funcitons prototypes
 
@@ -67,8 +74,23 @@ bool is_current_colored;
 
 
 int main(){
-    cout << "Hello To Our Photo Editor!";
-    sleep(1.5);
+    char *color = "COLOR 07";
+    clear();
+    cout << "Hello To Our Photo Editor!" << endl;
+    sleep(1);
+    if(is_os_win){
+        cout << "Please choose a color for the program !"<< endl;
+        vector<string>allowed{"1","2","3","4"};
+        string option = get_choice(allowed,1,"Choose from:\n(1) Pink & White (the best)\n(2) Blue & White\n(3) Aqua & Black\n(4) Default Console (boring)\nChoose an option: ");
+        if(option == "1"){
+            color = "COLOR fc";
+        }else if(option == "2"){
+            color = "COLOR f1";
+        }else if(option == "3"){
+            color = "COLOR 0b";
+        }
+        system(color);
+    }
     clear();
     load_img(1);
     string choice = "dummy"; // random intialization
@@ -84,15 +106,24 @@ int main(){
 
         // to tell user about the success of the operation
         if(choice != "0" && choice != "s" && choice != "l"){
+            
+            if(is_os_win){system("COLOR fa");}
             cout << "Filter Applied."<< endl;
             sleep(1.5);
+            if(is_os_win){system(color);}
+
         }else if(choice == "s"){
+
+            if(is_os_win){system("COLOR fa");}
             cout << "Image saved."<< endl;
             sleep(1.5);
+            if(is_os_win){system(color);}
         }
         else if(choice == "l"){
+            if(is_os_win){system("COLOR fa");}
             cout << "Image Loaded."<< endl;
             sleep(1.5);
+            if(is_os_win){system(color);}
         }
         // if it survived all of this that means it's difinelty zero, so we exit the program
         else{
@@ -105,9 +136,12 @@ int main(){
 }
 
 
-
 void clear(){
-    system("CLS");
+    if(is_os_win){
+        system("CLS");
+    }else{
+        system("clear");
+    }
 }
 
 bool is_colored(string filename){
