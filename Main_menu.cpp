@@ -11,10 +11,10 @@
     Date : 7 April 2022
 
     Version : 1.5
-    Scheduled Features : - Filter 6 & Filter B
-                         - Undo option
+    Scheduled Features : - Filter 6 & Filter B           needs integration with the main menu
+                         - Undo option                   work on progress
                          - Display photo
-                         - Colorful theme for the Terminal / CMD
+                         - Colorful theme for the Terminal / CMD   # DONE.... windows only but still compatible with other os
                          - Fixing Clear() Function to work with Mac & Linux        # done
                          - Adding more defensive regarding target file naming (last character must not be space)            # Done
 */
@@ -24,6 +24,7 @@
 #include <unistd.h> // to make sleep() work
 #include <fstream>
 #include <filesystem>
+#include <vector>
 #include "bmplib.h"
 #include "bmplib.cpp"
 #include "filter_group_3.h"
