@@ -1,7 +1,6 @@
 // FCI � Programming 1 � 2022 - Assignment 3 
 // Program Name: smallest ID filters.cpp
-// Last Modification Date: xx/xx/xxxx
-// Author1 and ID and Group: Abdelrahman Wael Mohammed Hanafy - ID:20210490
+// Last Modification Date: 5/4/2022
 // Teaching Assistant: Hager Ali
 // Purpose:
 

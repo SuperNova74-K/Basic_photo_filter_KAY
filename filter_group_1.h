@@ -24,28 +24,38 @@ using namespace std;
 
 
 //Black and White filter
-void black_white(unsigned char img[SIZE][SIZE])
+void black_white(unsigned char img[SIZE][SIZE][RGB])
 {
     for (int i = 0; i < SIZE; i++)
     {
         for (int j = 0; j < SIZE; j++)
         {
-            if (img[i][j] >= 128) //if it's closer to white then make it white 
+            int red = img[i][j][0]; //the red value
+            int green = img[i][j][1]; // the green value
+            int blue = img[i][j][2]; // the blue value
+
+            //"sqrt((red*red) + (green*green) + (blue*blue)" an equation I found on the internet to tell if a color is light or dark
+            if (sqrt((red * red) + (green * green) + (blue * blue)) > 200) //if this condition is correct then the color is a light color
             {
-                img[i][j] = 255;
+                //making each pixel white
+                img[i][j][0] = 255;
+                img[i][j][1] = 255;
+                img[i][j][2] = 255;
             }
-            else //if it's closer to black then make it black
+            else //else its a dark color
             {
-                img[i][j] = 0;
+                //making each pixel black
+                img[i][j][0] = 0;
+                img[i][j][1] = 0;
+                img[i][j][2] = 0;
             }
         }
-
     }
 }
 
 
 //flip filter
-void flip(unsigned char img[SIZE][SIZE], bool style) //a parameter that tells what style to do (horizontal or virtical)
+void flip(unsigned char img[SIZE][SIZE][RGB], bool style) //a parameter that tells what style to do (horizontal or virtical)
 {
     int temp;
 
@@ -57,10 +67,13 @@ void flip(unsigned char img[SIZE][SIZE], bool style) //a parameter that tells wh
         {
             for (int j = 0; j < (SIZE); j++)
             {
-                //swaping 2 numbers
-                temp = img[i][j];
-                img[i][j] = img[255 - i][j];
-                img[255 - i][j] = temp;
+                for (int k = 0; k < 3; k++)
+                {
+                    //swaping 2 numbers
+                    temp = img[i][j][k];
+                    img[i][j][k] = img[255 - i][j][k];
+                    img[255 - i][j][k] = temp;
+                }
             }
         }
     }
@@ -70,10 +83,13 @@ void flip(unsigned char img[SIZE][SIZE], bool style) //a parameter that tells wh
         {
             for (int j = 0; j < (SIZE / 2); j++)
             {
-                //swaping 2 numbers
-                temp = img[i][j];
-                img[i][j] = img[i][255 - j];
-                img[i][255 - j] = temp;
+                for (int k = 0; k < 3; k++)
+                {
+                    //swaping 2 numbers
+                    temp = img[i][j][k];
+                    img[i][j][k] = img[i][255 - j][k];
+                    img[i][255 - j][k] = temp;
+                }
             }
         }
     }
@@ -82,7 +98,7 @@ void flip(unsigned char img[SIZE][SIZE], bool style) //a parameter that tells wh
 
 
 //mirror filter
-void mirror(unsigned char img[SIZE][SIZE] ,string style) //a parameter that tells what style to do (lower or upper or left or right)
+void mirror(unsigned char img[SIZE][SIZE][RGB] ,string style) //a parameter that tells what style to do (lower or upper or left or right)
 {
     /*
         Style menu:
@@ -100,7 +116,10 @@ void mirror(unsigned char img[SIZE][SIZE] ,string style) //a parameter that tell
         {
             for (int j = 0; j < (SIZE); j++)
             {
-                img[i][j] = img[255 - i][j]; //make the upper half the flip of the lower half
+                for (int k = 0; k < 3; k++)
+                {
+                    img[i][j][k] = img[255 - i][j][k]; //make the upper half the flip of the lower half
+                }
             }
         }
     }
@@ -111,7 +130,10 @@ void mirror(unsigned char img[SIZE][SIZE] ,string style) //a parameter that tell
         {
             for (int j = 0; j < (SIZE); j++)
             {
-                img[255 - i][j] = img[i][j]; //make the lower half the flip of the upper half 
+                for (int k = 0; k < 3; k++)
+                {
+                    img[255 - i][j][k] = img[i][j][k]; //make the lower half the flip of the upper half 
+                }
             }
         }
     }
@@ -121,9 +143,10 @@ void mirror(unsigned char img[SIZE][SIZE] ,string style) //a parameter that tell
         {
             for (int j = 0; j < (SIZE / 2); j++) //only half the columns
             {
-
-                img[i][j] = img[i][255 - j]; //make the left half the flip of the right half
-
+                for (int k = 0; k < 3; k++)
+                {
+                    img[i][j][k] = img[i][255 - j][k]; //make the left half the flip of the right half
+                }
             }
         }
     }
@@ -133,9 +156,10 @@ void mirror(unsigned char img[SIZE][SIZE] ,string style) //a parameter that tell
         {
             for (int j = 0; j < (SIZE / 2); j++) //only half the columns
             {
-
-                img[i][255 - j] = img[i][j]; //make the right half the flip of the left half
-
+                for (int k = 0; k < 3; k++)
+                {
+                    img[i][255 - j][k] = img[i][j][k]; //make the right half the flip of the left half
+                }
             }
         }
     }
@@ -144,35 +168,62 @@ void mirror(unsigned char img[SIZE][SIZE] ,string style) //a parameter that tell
 
 
 //edge detection filter
-void edge_detect(unsigned char img[SIZE][SIZE])
+void edge_detect(unsigned char img[SIZE][SIZE][RGB])
 {
-    int avrege = 0;
-    unsigned char new_image[SIZE][SIZE];
+    int avrege_r = 0;
+    int avrege_g = 0;
+    int avrege_b = 0;
+    unsigned char new_image[SIZE][SIZE][RGB];
 
     for (int i = 0; i < SIZE; i++)
     {
         for (int j = 0; j < SIZE; j++)
         {
-            new_image[i][j] = 255;
-            avrege += img[i][j];
+            //coloring the image white
+            new_image[i][j][0] = 255;
+            new_image[i][j][1] = 255;
+            new_image[i][j][2] = 255;
+
+            //calculating the avrege or red, green and blue
+            avrege_r += image[i][j][0];
+            avrege_g += image[i][j][1];
+            avrege_b += image[i][j][2];
         }
     }
 
-    avrege = avrege / (256 * 256); //clculating the avrege of pixels color
-    int value = avrege / 4; //we are comparing each pixel value with this value to determine if its an edge or not
+    avrege_r = avrege_r / (256 * 256); //clculating the avrege of red pixels
+    avrege_g = avrege_g / (256 * 256); //clculating the avrege of green pixels
+    avrege_b = avrege_b / (256 * 256); //clculating the avrege of blue pixels
+
+
+    //the value that I'm comparing with is (sum of every avrege/4) / 3
+    int value = ((avrege_r / 4) + (avrege_g / 4) + (avrege_b / 4)) / 3;
 
 
     for (int i = 1; i < SIZE - 1; i++) //"SIZE-1" is to avoid looping at the edges which can cause out of range error
     {
         for (int j = 1; j < SIZE - 1; j++)
         {
-            if ( //checking all the 8 pixels around each pixel 
-                (img[i + 1][j] - img[i][j]) > value || (img[i - 1][j] - img[i][j]) > value || (img[i][j + 1] - img[i][j]) > value ||
-                (img[i][j - 1] - img[i][j]) > value || (img[i + 1][j + 1] - img[i][j]) > value || (img[i - 1][j - 1] - img[i][j]) > value ||
-                (img[i + 1][j - 1] - img[i][j]) > value || (img[i - 1][j + 1] - img[i][j]) > value
+            //calculating the avrege of the colors (red, green and blue) of every pixel around the current pixel
+            int current = (image[i][j][0] + image[i][j][1] + image[i][j][2]) / 3;
+            int top = (image[i + 1][j][0] + image[i + 1][j][1] + image[i + 1][j][2]) / 3;
+            int bottom = (image[i - 1][j][0] + image[i - 1][j][1] + image[i - 1][j][2]) / 3;
+            int right = (image[i][j + 1][0] + image[i][j + 1][1] + image[i][j + 1][2]) / 3;
+            int left = (image[i][j - 1][0] + image[i][j - 1][1] + image[i][j - 1][2]) / 3;
+            int top_right = (image[i + 1][j + 1][0] + image[i + 1][j + 1][1] + image[i + 1][j + 1][2]) / 3;
+            int top_left = (image[i + 1][j - 1][0] + image[i + 1][j - 1][1] + image[i + 1][j - 1][2]) / 3;
+            int bottom_right = (image[i - 1][j + 1][0] + image[i - 1][j + 1][1] + image[i - 1][j + 1][2]) / 3;
+            int bottom_left = (image[i - 1][j - 1][0] + image[i - 1][j - 1][1] + image[i - 1][j - 1][2]) / 3;
+
+            if ( //checking the difference between all 8 pixels around the current pixel and the current pixel then compare it with the value calculated before
+                (top - current) > value || (bottom - current) > value || (right - current) > value ||
+                (left - current) > value || (top_right - current) > value || (bottom_left - current) > value ||
+                (top_left - current) > value || (bottom_right - current) > value
                 )
             {
-                new_image[i][j] = 0; //if the diffrence between them is greater than the value then its an edge
+                new_image[i][j][0] = 0; //if the diffrence between them is greater than the value then its an edge
+                new_image[i][j][1] = 0;
+                new_image[i][j][2] = 0;
             }
         }
     }
@@ -181,7 +232,10 @@ void edge_detect(unsigned char img[SIZE][SIZE])
     {
         for (int j = 0; j < SIZE; j++)
         {
-            img[i][j] = new_image[i][j]; //coping into the orignal image
+            for (int k = 0; k < 3; k++)
+            {
+                img[i][j][k] = new_image[i][j][k]; //coping into the orignal image
+            }
         }
     }
 }
