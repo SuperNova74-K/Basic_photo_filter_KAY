@@ -12,8 +12,8 @@
 
     Version : 1.5
     Scheduled Features : - Filter 6 & Filter B           needs integration with the main menu
-                         - Undo option                   work on progress
-                         - Display photo
+                         - Undo option                   #done
+                         - Display photo                    
                          - Colorful theme for the Terminal / CMD   # DONE.... windows only but still compatible with other os
                          - Fixing Clear() Function to work with Mac & Linux        # done
                          - Adding more defensive regarding target file naming (last character must not be space)            # Done
