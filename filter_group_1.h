@@ -18,8 +18,8 @@
 
 using namespace std;
 
-// image 2D array
-// unsigned char image[SIZE][SIZE];
+// img 2D array
+// unsigned char img[SIZE][SIZE];
 // unsigned char new_image[SIZE][SIZE];
 
 
@@ -61,8 +61,8 @@ void flip(unsigned char img[SIZE][SIZE][RGB], bool style) //a parameter that tel
 
     if (style == true) //or any thing else (you can change it to fit the final code) 
     {
-        //we only swap half the image with the other half so I make it SIZE/2
-        //if it was SIZE it will return to be the orignal image
+        //we only swap half the img with the other half so I make it SIZE/2
+        //if it was SIZE it will return to be the orignal img
         for (int i = 0; i < (SIZE / 2); i++)
         {
             for (int j = 0; j < (SIZE); j++)
@@ -179,15 +179,15 @@ void edge_detect(unsigned char img[SIZE][SIZE][RGB])
     {
         for (int j = 0; j < SIZE; j++)
         {
-            //coloring the image white
+            //coloring the img white
             new_image[i][j][0] = 255;
             new_image[i][j][1] = 255;
             new_image[i][j][2] = 255;
 
             //calculating the avrege or red, green and blue
-            avrege_r += image[i][j][0];
-            avrege_g += image[i][j][1];
-            avrege_b += image[i][j][2];
+            avrege_r += img[i][j][0];
+            avrege_g += img[i][j][1];
+            avrege_b += img[i][j][2];
         }
     }
 
@@ -205,15 +205,15 @@ void edge_detect(unsigned char img[SIZE][SIZE][RGB])
         for (int j = 1; j < SIZE - 1; j++)
         {
             //calculating the avrege of the colors (red, green and blue) of every pixel around the current pixel
-            int current = (image[i][j][0] + image[i][j][1] + image[i][j][2]) / 3;
-            int top = (image[i + 1][j][0] + image[i + 1][j][1] + image[i + 1][j][2]) / 3;
-            int bottom = (image[i - 1][j][0] + image[i - 1][j][1] + image[i - 1][j][2]) / 3;
-            int right = (image[i][j + 1][0] + image[i][j + 1][1] + image[i][j + 1][2]) / 3;
-            int left = (image[i][j - 1][0] + image[i][j - 1][1] + image[i][j - 1][2]) / 3;
-            int top_right = (image[i + 1][j + 1][0] + image[i + 1][j + 1][1] + image[i + 1][j + 1][2]) / 3;
-            int top_left = (image[i + 1][j - 1][0] + image[i + 1][j - 1][1] + image[i + 1][j - 1][2]) / 3;
-            int bottom_right = (image[i - 1][j + 1][0] + image[i - 1][j + 1][1] + image[i - 1][j + 1][2]) / 3;
-            int bottom_left = (image[i - 1][j - 1][0] + image[i - 1][j - 1][1] + image[i - 1][j - 1][2]) / 3;
+            int current = (img[i][j][0] + img[i][j][1] + img[i][j][2]) / 3;
+            int top = (img[i + 1][j][0] + img[i + 1][j][1] + img[i + 1][j][2]) / 3;
+            int bottom = (img[i - 1][j][0] + img[i - 1][j][1] + img[i - 1][j][2]) / 3;
+            int right = (img[i][j + 1][0] + img[i][j + 1][1] + img[i][j + 1][2]) / 3;
+            int left = (img[i][j - 1][0] + img[i][j - 1][1] + img[i][j - 1][2]) / 3;
+            int top_right = (img[i + 1][j + 1][0] + img[i + 1][j + 1][1] + img[i + 1][j + 1][2]) / 3;
+            int top_left = (img[i + 1][j - 1][0] + img[i + 1][j - 1][1] + img[i + 1][j - 1][2]) / 3;
+            int bottom_right = (img[i - 1][j + 1][0] + img[i - 1][j + 1][1] + img[i - 1][j + 1][2]) / 3;
+            int bottom_left = (img[i - 1][j - 1][0] + img[i - 1][j - 1][1] + img[i - 1][j - 1][2]) / 3;
 
             if ( //checking the difference between all 8 pixels around the current pixel and the current pixel then compare it with the value calculated before
                 (top - current) > value || (bottom - current) > value || (right - current) > value ||
@@ -234,7 +234,7 @@ void edge_detect(unsigned char img[SIZE][SIZE][RGB])
         {
             for (int k = 0; k < 3; k++)
             {
-                img[i][j][k] = new_image[i][j][k]; //coping into the orignal image
+                img[i][j][k] = new_image[i][j][k]; //coping into the orignal img
             }
         }
     }

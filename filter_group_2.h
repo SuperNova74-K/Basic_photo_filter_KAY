@@ -21,7 +21,7 @@ void clear_terminal(){
     }
 }
 
- void shuffle_img(unsigned char img[][SIZE][RGB])
+void shuffle_img(unsigned char img[][SIZE][RGB])
 {
     unsigned char img2[SIZE][SIZE][RGB];
     retake_input:
@@ -34,14 +34,14 @@ void clear_terminal(){
     do{    
         cout << "Enter the quarter's order : ";
         getline(cin, order_inpt);
-        for(int i = 0; i < order_inpt.length(); i++){
-            if(order[i] == ' '){
+        for(int i = 0; i < order_inpt.length() - 1; i++){
+            if(order_inpt[i] == ' '){
                 order_inpt.erase(i,1);
                 i--;
             }
         }
         if(!regex_match(order_inpt ,regex_filter)){
-            cout << endl <<"Invalid input !" << endl;
+            cout << endl <<"Invalid 546 input !" << endl;
             sleep(1);
             clear_terminal();
         }
@@ -49,8 +49,8 @@ void clear_terminal(){
 
     int order_number = stoi(order_inpt);
 
-    for(int i = 3; i <= 0; i--){
-        order[i] = order_number % 10;
+    for(int i = 0; i <= 3; i++){
+        order[3-i] = order_number % 10;
         order_number /= 10;
     } 
     
@@ -58,15 +58,6 @@ void clear_terminal(){
     while (loopAgain)
     {
         loopAgain = false;
-        // cin >> order[0] >> order[1] >> order[2] >> order[3];
-        
-        for (int i = 0; i < 4; i++)
-        {
-            if (order[i] > 4 || order[i] < 1)
-            {
-                loopAgain = true;
-            }
-        }
 
         for (int i = 0; i < 4; i++)
         {
@@ -89,9 +80,9 @@ void clear_terminal(){
     }
     
     
-    for (int i = 0; i < SIZE / 2; i++)
+    for (int i = 0; i < 129; i++)
     {
-        for (int j = 0; j < SIZE / 2; j++)
+        for (int j = 0; j < 129; j++)
         {
             for (int k = 0; k < RGB; k++) {
 
@@ -204,14 +195,6 @@ void enlarge(unsigned char img[][SIZE][RGB] ,int quarter_num)
     unsigned char img2[SIZE][SIZE][RGB];
     int num1 = 0 ;
     int num2 = 0 ;
-    // int quarter_num;
-    // cout <<"enter which quater number do you want : " << endl;
-    // cout<<"1-TOP Left"<<endl;
-    // cout<<"2-TOP Right"<<endl;
-    // cout<<"3-Down Left"<<endl;
-    // cout<<"4-Down Right"<<endl;
-    // cin>> quarter_num;
-    // while(true){
 
     if (quarter_num == 1){
         num1 = num2 = 0;
@@ -226,20 +209,6 @@ void enlarge(unsigned char img[][SIZE][RGB] ,int quarter_num)
         num1 = num2 = 127;
     }
 
-//         else if (!isdigit(quarter_num)){
-
-//             cout<<"please enter 1 or 2 or 3 or 4" << endl;
-//             cin>>quarter_num;
-// continue;
-
-// }
-        // else {
-        //     cout<<"please enter 1 or 2 or 3 or 4" << endl;
-        //     cin>>quarter_num;
-        //     continue;
-        //     }
-
-        // }
 
     for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j< SIZE; j++) {
@@ -265,20 +234,18 @@ void enlarge(unsigned char img[][SIZE][RGB] ,int quarter_num)
 }
 
 
-void rotate_img(unsigned char img[][SIZE][RGB] ,int degree)
+void rotate_img(unsigned char img[][SIZE][RGB] ,string degree)
 {
-    // int degree = 0;
-    // cout<<" enter degree : " ;
-    // cin>>degree;
+
    unsigned char img2[SIZE][SIZE][RGB];
 
-   if (degree == 90)
+   if (degree == "1")
     {
         for (int i = 0; i < SIZE; i++)
         {
             for (int j = 0; j <  SIZE ; j++)
             {
-                for(int k = 0; k <  SIZE ; k++)
+                for(int k = 0; k <  RGB ; k++)
                 {
                     img2[i][j][k] = img[j][255 - i][k];
                 }
@@ -286,7 +253,7 @@ void rotate_img(unsigned char img[][SIZE][RGB] ,int degree)
         }
     }
 
-    else if (degree == 180)
+    else if (degree == "2")
     {
         for (int i = 0; i < SIZE; i++)
         {
@@ -300,7 +267,7 @@ void rotate_img(unsigned char img[][SIZE][RGB] ,int degree)
         }
     }
 
-    else if (degree == 270)
+    else if (degree == "3")
     {
         for (int i = 0; i < SIZE; i++)
         {
