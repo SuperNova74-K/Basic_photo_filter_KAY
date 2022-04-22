@@ -28,8 +28,8 @@
 #include "bmplib.h"
 #include "bmplib.cpp"
 #include "filter_group_3.h"
-// #include "filter_group_1.h"
-// #include "filter_group_2.h"
+#include "filter_group_1.h"
+#include "filter_group_2.h"
 
 using namespace std;
 
@@ -58,8 +58,7 @@ int find(vector<string>vec, string target); // searches about a string in a vect
 bool is_colored(string filename);
 bool can_open_file(string filename);
 void save_file(char *option_as_C_string);
-
-
+void undo();
 
 
 unsigned char img[SIZE][SIZE][RGB]; // declaring global colored img
@@ -76,6 +75,7 @@ bool is_current_colored;
 
 int main(){
     char *color = "COLOR 07";
+    char *color2 = "COLOR fa";
     clear();
     cout << "Hello To Our Photo Editor!" << endl;
     sleep(1);
@@ -85,20 +85,41 @@ int main(){
         string option = get_choice(allowed,1,"Choose from:\n(1) Pink & White (the best)\n(2) Blue & White\n(3) Aqua & Black\n(4) Default Console (boring)\nChoose an option: ");
         if(option == "1"){
             color = "COLOR fc";
+            color2 = "COLOR fa"; 
         }else if(option == "2"){
             color = "COLOR f1";
+            color2 = "COLOR fa";
         }else if(option == "3"){
             color = "COLOR 0b";
+            color2 = "COLOR 0a";
+        }else{
+            color2 = "COLOR 0a";
         }
         system(color);
     }
     clear();
     load_img(1);
+
+
+    for (int i = 0; i < SIZE; i++)
+    {
+        for (int j = 0; j < SIZE; j++)
+        {
+            for (int k = 0; k < 3; k++)
+            {
+                img_undo[i][j][k] = img[i][j][k];
+            }
+            
+        }
+        
+    }
+    
+
     string choice = "dummy"; // random intialization
 
     // keep asking untill the user wants to exit
     while(choice != "0"){
-        vector<string>allowed = {"1","2","3","4","5","7","8","9","0","a","c","s","l"}; // this is a vector of all acceptable inputs
+        vector<string>allowed = {"1","2","3","4","5","6","7","8","9","0","a","b","c","s","l","u"}; // this is a vector of all acceptable inputs
         // could have done this with regex but we wanted Custom function for easier debugging
         
         choice = get_choice(allowed,0, "d"); // getting the user choice using the fuction 
@@ -106,24 +127,30 @@ int main(){
         clear();
 
         // to tell user about the success of the operation
-        if(choice != "0" && choice != "s" && choice != "l"){
+        if(choice != "0" && choice != "s" && choice != "l" && choice != "u"){
             
-            if(is_os_win){system("COLOR fa");}
+            if(is_os_win){system(color2);}
             cout << "Filter Applied."<< endl;
             sleep(1.5);
             if(is_os_win){system(color);}
 
         }else if(choice == "s"){
 
-            if(is_os_win){system("COLOR fa");}
+            if(is_os_win){system(color2);}
             cout << "Image saved."<< endl;
             sleep(1.5);
             if(is_os_win){system(color);}
         }
         else if(choice == "l"){
-            if(is_os_win){system("COLOR fa");}
+            if(is_os_win){system(color2);}
             cout << "Image Loaded."<< endl;
             sleep(1.5);
+            if(is_os_win){system(color);}
+        }
+        else if(choice == "u"){
+            if(is_os_win){system(color2);}
+            cout << "Changes were reverted. (only on step)"<< endl;
+            sleep(2);
             if(is_os_win){system(color);}
         }
         // if it survived all of this that means it's difinelty zero, so we exit the program
@@ -163,13 +190,14 @@ void print_options(){
     cout << "(3) Merge"<< endl;
     cout << "(4) Flip"<< endl;
     cout << "(5) Darken & Lighten"<< endl;
-    cout << "(6) Rotate (Temporarily not available)"<< endl;
+    cout << "(6) Rotate"<< endl;
     cout << "(7) Detect Edges"<< endl;
     cout << "(8) Enlarge"<< endl;
     cout << "(9) Shrink"<< endl;
     cout << "(a) Mirror 1/2 Image"<< endl;
-    cout << "(b) Shuffle (Temporarily not available)"<< endl;
+    cout << "(b) Shuffle"<< endl;
     cout << "(c) Blur"<< endl;
+    cout << "(u) Undo (only one step)"<< endl;    
     cout << "(s) Save the image to a file"<< endl;
     cout << "(l) Load img to edit."<< endl;
     cout << "(0) Exit"<< endl;
@@ -220,10 +248,10 @@ string get_choice(vector<string>allowed, int mode, string message){
 void excute_choice(string choice){
     clear();
     if(choice == "1"){
-        // black_white(img);
+        black_white(img);
     }
     if(choice == "2"){
-        // Invert_img_filter(img);
+        invert(img);
     }
     else if(choice == "3"){
         load_img(2);
@@ -235,7 +263,7 @@ void excute_choice(string choice){
         vector<string>allowed{"1","2"};
         string option = get_choice(allowed,1,"Choose Mode:\n(1) Horizontal\n(2) Vertical\nChoose an option: ");
         bool style = (option == "1");
-        // flip(img, style); // feeding the filter the info needed to work
+        flip(img, style); // feeding the filter the info needed to work
     }
     else if(choice == "5"){
         vector<string>allowed{"1","2"};
@@ -243,31 +271,34 @@ void excute_choice(string choice){
         bool style = (option == "1");
         darken_n_lighten(img,style);
     }
-    // we haven't done the filter 6 yet (will be done after the mid-terms)
-    // else if(choice == "6"){
-    //     rotate
-    // }
+    else if(choice == "6"){
+        vector<string>allowed{"1","2","3"};
+        string option = get_choice(allowed,1,"Choose a degree to rotate by:\n(1) 90\n(2) 180\n(3) 270\nChoose an option: ");
+        rotate_img(img, stoi(option));
+    }
     else if(choice == "7"){
-        // edge_detect(img);
+        edge_detect(img);
     }
     else if(choice == "8"){
         vector<string>allowed{"1","2","3","4"};
-        string option = get_choice(allowed,1,"Choose the qraurter you want to enlarge:\n(1) First quarter\n(2) Second quarter\n(3) Third quarter\n(4) Fourth quarter\nChoose an option: ");
-        // enlarge_img_filter(img, option);
+        string option = get_choice(allowed,1,"Choose the qraurter you want to enlarge:\n(1) Top left\n(2) Top right\n(3) Donw left\n(4) Down right\nChoose an option: ");
+        // enlarge(img, option);
+        enlarge(img ,stoi(option));
     }
     else if(choice == "9"){
         vector<string>allowed{"1","2","3"};
         string option = get_choice(allowed,1,"Choose Mode:\n(1) 1/2\n(2) 1/3\n(3) 1/4\nChoose an option: ");
-        // shrink_img(img, stoi(option) + 1);
+        shrink_img(img, stoi(option) + 1);
     }
     else if(choice == "a"){
         vector<string>allowed{"1","2","3","4"};
         string option = get_choice(allowed,1,"Choose the part to mirror:\n(1) lower\n(2) upper\n(3) right\n(4) Left\nChoose an option: ");
-        // mirror(img, option);
+        mirror(img, option);
     }
-    // else if(choice == "b"){ // we haven't done this filter yet, scheduled after the mid-terms
-    //     Shuffle
-    // }
+    else if(choice == "b"){
+        clear();
+        shuffle_img(img);;
+    }
     else if(choice == "c"){
         blur_img(img);
     }
@@ -341,9 +372,13 @@ void excute_choice(string choice){
             }
         }
     }
+    
     else if(choice == "l"){
         clear();
         load_img(1);
+    }
+    if(choice == "u"){
+        undo();
     }
     
 }
@@ -416,6 +451,20 @@ void load_img(int pic_number){
         }
 }
 
+void undo(){
+    for (int i = 0; i < SIZE; i++)
+    {
+        for (int j = 0; j < SIZE; j++)
+        {
+            for (int k = 0; k < 3; k++)
+            {
+                img[i][j][k] = img_undo[i][j][k];
+            }
+            
+        }
+        
+    }
+}
 
 void save_file(char *option_as_C_string){
     if(is_current_colored){
